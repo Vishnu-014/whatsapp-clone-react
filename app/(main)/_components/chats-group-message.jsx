@@ -15,6 +15,25 @@ import {
   User,
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import GroupInfoSheet from './group-info-sheet';
 
 //#0B141A
 //#0F1919
@@ -24,6 +43,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const ChatsGroupMessage = () => {
   const { user } = useUser();
   const [newMessage, setNewMessage] = useState('');
+  const [groupInfo, setGroupInfo] = useState(false);
   const divUnderMessages = useRef();
 
   const selectedChatTypeId = useChatTypeView((state) => state.id);
@@ -74,9 +94,29 @@ const ChatsGroupMessage = () => {
   // console.log(getGroup);
   // console.log('====================================');
 
+  const Sidebar = () => {
+    return (
+      <Sheet>
+        <SheetTrigger>Open</SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Are you sure absolutely sure?</SheetTitle>
+            <SheetDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+    );
+  };
+
   return (
     <div className="h-full w-full relative flex flex-col">
-      <div className="flex absolute top-0 left-0 right-0  h-14 bg-[#F0F2F6] dark:bg-[#202C33]">
+      <div
+        onClick={() => <Sidebar />}
+        className="flex absolute top-0 left-0 right-0  h-14 bg-[#F0F2F6] dark:bg-[#202C33]"
+      >
         <div className="w-full flex flex-row items-center justify-between mx-3">
           <div className="flex flex-row space-x-3">
             <Avatar>
@@ -89,12 +129,29 @@ const ChatsGroupMessage = () => {
               <h1 className="text-neutral-800 dark:text-white font-medium text-base">
                 {getGroup?.name}
               </h1>
-              <h1 className="text-neutral-400 font-medium text-xs"></h1>
+              <h1 className="text-neutral-400 font-medium text-xs">
+                Typing...
+              </h1>
             </div>
           </div>
-          <div className="flex flex-row gap-x-5">
+          <div className="flex flex-row items-center justify-center gap-x-5">
             <Search className="w-5 h-5 text-neutral-600 dark:text-[#AEBAC1]" />
-            <MoreVertical className="w-5 h-5 text-neutral-600 dark:text-[#AEBAC1]" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <MoreVertical className="h-5 w-5 text-[#AEBAC1] cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-[#F0F2F6] dark:bg-[#233138] border-0 text-[#AEBAC1] p-3">
+                <DropdownMenuItem asChild>
+                  <GroupInfoSheet />
+                </DropdownMenuItem>
+                <DropdownMenuItem>Select messages</DropdownMenuItem>
+                <DropdownMenuItem>Close chat</DropdownMenuItem>
+                <DropdownMenuItem>Mute notification</DropdownMenuItem>
+                <DropdownMenuItem>Disappearing messages</DropdownMenuItem>
+                <DropdownMenuItem>Clear chat</DropdownMenuItem>
+                <DropdownMenuItem>Exit group</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

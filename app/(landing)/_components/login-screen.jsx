@@ -22,14 +22,20 @@ const LoginScreen = () => {
   });
 
   if (currentUser?.length >= 1) {
-    return redirect('/chats')
+    return redirect('/chats');
   }
 
   //console.log(currentUser);
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-y-3">
-      <Image src={'/whatsapplogo.svg'} alt="logo" height="150" width="150" />
+      <Image
+        src={'/whatsapplogo.svg'}
+        alt="logo"
+        height="150"
+        width="150"
+        className="animate-pulse transition"
+      />
       {isLoading && <Loader className="animate-spin" stroke="white" />}
       {!isAuthenticated && !isLoading && (
         <SignInButton mode="modal">

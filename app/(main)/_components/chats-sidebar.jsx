@@ -51,6 +51,10 @@ import SettingsSheet from './settings-sheet';
 import CreateGroup from './create-group-sheet';
 import { ModeToggle } from '@/components/mode-toggle';
 import { cn } from '@/lib/utils';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+
 
 const ChatsSidebar = () => {
   const { user } = useUser();
@@ -99,8 +103,11 @@ const ChatsSidebar = () => {
   if (getAllGroups) {
     chatGroups = [...createdChatGroups, ...joinedChatGroups];
   }
-  //console.log(getAllGroups);
-  //console.log(chatGroups);
+  // To get all groups last messages;
+  const getAllGroupsLastMsgObj = useQuery(api.groupMessage.getGroupsLastMsg);
+  // To get all users last messages;
+  const getAllUsersLastMsgObj = useQuery(api.directMessage.getUsersLastMsg);
+  
 
   return (
     <div className="h-full flex flex-col bg-white dark:bg-[#111B21]">
@@ -201,10 +208,10 @@ const ChatsSidebar = () => {
                   setChatTypeView(user.userId, 'USER');
                 }}
                 className={cn(
-                  'hover:bg-[#202C33]',
+                  'hover:bg-[#F5F6F6] dark:hover:bg-[#202C33]',
                   user.userId === selectedChatTypeId &&
                     selectedChatType === 'USER' &&
-                    'bg-[#2A3942] hover:bg-[#2A3942] transition'
+                    'bg-[#F0F2F6] dark:bg-[#2A3942] dark:hover:bg-[#2A3942] hover:bg-[#F0F2F6] transition'
                 )}
               >
                 <div className="flex flex-row items-center mb-1 relative py-1 mx-2">
@@ -224,15 +231,12 @@ const ChatsSidebar = () => {
                         {user.username}
                       </p>
                       <p className="text-neutral-400 text-xs text-end absolute right-1">
-                        09/06/2023
+                      {/* {getAllUsersLastMsgObj?.[user._id]?._creationTime} */}
+                      {dayjs(getAllUsersLastMsgObj?.[user._id]?._creationTime).fromNow()}
                       </p>
                     </div>
                     <p className="text-neutral-400 text-xs line-clamp-1">
-                      Power chat Lorem ipsumsadasdas Lorem ipsum, dolor sit amet
-                      consectetur adipisicing elit. Repellat ipsum aut
-                      voluptates? Quam, reiciendis iusto quia ratione totam
-                      voluptatem libero optio dolorum, accusantium sunt porro
-                      voluptatibus delectus! Quos, deleniti dolores.
+                      {getAllUsersLastMsgObj?.[user._id]?.text}
                     </p>
                   </div>
                 </div>
@@ -250,10 +254,10 @@ const ChatsSidebar = () => {
                   setChatTypeView(group._id, 'GROUP');
                 }}
                 className={cn(
-                  'hover:bg-[#202C33]',
+                  'hover:bg-[#F5F6F6] dark:hover:bg-[#202C33]',
                   selectedChatTypeId === group._id &&
                     selectedChatType === 'GROUP' &&
-                    'bg-[#2A3942] hover:bg-[#2A3942] transition'
+                    'bg-[#F0F2F6] dark:bg-[#2A3942] dark:hover:bg-[#2A3942] hover:bg-[#F0F2F6] transition'
                 )}
               >
                 <div className="flex flex-row items-center mb-1 py-1 mx-2 relative">
@@ -263,8 +267,8 @@ const ChatsSidebar = () => {
                       alt="@shadcn"
                       className="object-cover"
                     />
-                    <AvatarFallback className="bg-gray-400">
-                      <User className="h-8 w-8" fill="white" />
+                    <AvatarFallback className="bg-gray-100 dark:bg-gray-400">
+                      <User className="h-8 w-8 text-gray-300" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-baseline space-x-3 space-y-1">
@@ -273,15 +277,11 @@ const ChatsSidebar = () => {
                         {group.name}
                       </p>
                       <p className="text-neutral-400 text-xs text-end absolute right-1">
-                        09/06/2023
+                      {dayjs(getAllUsersLastMsgObj?.[user._id]?._creationTime).fromNow()}
                       </p>
                     </div>
                     <p className="text-neutral-400 text-xs line-clamp-1">
-                      Power chat Lorem ipsumsadasdas Lorem ipsum, dolor sit amet
-                      consectetur adipisicing elit. Repellat ipsum aut
-                      voluptates? Quam, reiciendis iusto quia ratione totam
-                      voluptatem libero optio dolorum, accusantium sunt porro
-                      voluptatibus delectus! Quos, deleniti dolores.
+                      {getAllGroupsLastMsgObj?.[group._id]?.text}
                     </p>
                   </div>
                 </div>

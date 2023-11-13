@@ -8,8 +8,17 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, Bell, Check, Menu, Search, Sun, X } from 'lucide-react';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import {
+  ArrowLeft,
+  Bell,
+  Check,
+  Menu,
+  Search,
+  Sun,
+  User,
+  X,
+} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import {
   Dialog,
@@ -110,9 +119,12 @@ const CreateGroup = () => {
             )}
 
             <div className="flex flex-col items-center justify-center pt-10">
-              <Avatar className="w-36 h-36">
-                <AvatarImage src="https://github.com/shadcn.png" />
-              </Avatar>
+            <Avatar className="h-32 w-32 hover:opacity-50">
+              <AvatarImage src={''} />
+              <AvatarFallback className="bg-white dark:bg-gray-400">
+                <User className="h-16 w-16 text-gray-300" />
+              </AvatarFallback>
+            </Avatar>
             </div>
 
             <div className="flex flex-col gap-y-3 pt-4">

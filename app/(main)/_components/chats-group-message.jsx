@@ -121,8 +121,8 @@ const ChatsGroupMessage = () => {
           <div className="flex flex-row space-x-3">
             <Avatar>
               <AvatarImage src={''} />
-              <AvatarFallback className="bg-gray-400">
-                <User className="h-8 w-8" fill="white" />
+              <AvatarFallback className="bg-white dark:bg-gray-400">
+                <User className="h-8 w-8 text-gray-300" />
               </AvatarFallback>
             </Avatar>
             <div>

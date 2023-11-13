@@ -83,3 +83,66 @@ export const getAllGroupMessages = query({
     return messages;
   },
 });
+
+// Get group details
+export const groupDetails = query({
+  args: { groupId: v.optional(v.id('groups')) },
+  handler: async (ctx, args) => {
+    const groupdetails = await ctx.db
+      .query('groups')
+      .filter((q) => q.eq(q.field('_id'), args.groupId))
+      .collect();
+
+    return groupdetails;
+  },
+});
+
+// Get User by ID
+export const getUserById = query({
+  args: { userID: v.optional(v.id('users')) },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('_id'), args.userID))
+      .unique();
+
+    return user;
+  },
+});
+
+// Get last message fom group
+export const lastMessage = query({
+  args: { groupId: v.optional(v.id('groups')) },
+  handler: async (ctx, args) => {
+    const lastmessage = await ctx.db
+      .query('groupMessages')
+      .filter((q) => q.eq(q.field('group'), args.groupId))
+      .order('desc')
+      .first();
+
+    return lastmessage;
+  },
+});
+
+// Get last message from all the groups
+export const getGroupsLastMsg = query({
+  handler: async (ctx, args) => {
+    const groups = await ctx.db.query('groupMessages').collect();
+
+    const lastMessagesObject: { [key: string]: any } = {};
+
+    for (const group of groups) {
+      const lastMessage = await ctx.db
+        .query('groupMessages')
+        .filter((q) => q.eq(q.field('group'), group.group))
+        .order('desc')
+        .first();
+
+      if (lastMessage) {
+        lastMessagesObject[group.group] = lastMessage;
+      }
+    }
+
+    return lastMessagesObject;
+  },
+});

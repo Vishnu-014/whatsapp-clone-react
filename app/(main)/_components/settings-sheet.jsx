@@ -23,6 +23,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useTheme } from 'next-themes';
+import { currentUser } from '@/lib/currentUser';
 
 // #111B21
 // #202C33
@@ -31,17 +32,19 @@ const SettingsSheet = () => {
   const inputRef = useRef(null);
   const { theme, setTheme } = useTheme();
 
+  const user = currentUser();
+
   return (
     <Sheet>
       <SheetTrigger className="text-sm w-full py-1.5 text-left rounded-sm pl-2 mr-5 hover:bg-white dark:hover:bg-[#111B21] text-neutral-900 dark:text-neutral-300">
         Settings
       </SheetTrigger>
       <SheetContent
-        className="w-[257px] md:w-[500px] lg:w-[358px] bg-[#111B21] border-r-0 m-0 p-0"
+        className="w-[257px] md:w-[500px] lg:w-[358px] bg-[#FFF] dark:bg-[#111B21] border-r-0 m-0 p-0"
         side="left"
       >
         <SheetHeader>
-          <SheetTitle className="text-neutral-300 bg-[#202C33] h-28 pt-16 pl-3 text-xl font-normal">
+          <SheetTitle className="text-neutral-100 dark:text-neutral-300 bg-[#37816A] dark:bg-[#202C33] h-28 pt-16 pl-3 text-xl font-normal">
             Settings
           </SheetTitle>
         </SheetHeader>
@@ -51,7 +54,7 @@ const SettingsSheet = () => {
             {/* //?Search */}
             <div className="flex flex-row items-center justify-between mt-2 mx-2 gap-2">
               {/* Search Input */}
-              <div className="flex flex-1 items-center px-2 rounded-md overflow-hidden bg-[#202C33]">
+              <div className="flex flex-1 items-center px-2 rounded-md overflow-hidden bg-[#F0F2F6] dark:bg-[#202C33]">
                 {isEditing ? (
                   <ArrowLeft className="w-5 h-5" stroke="#708089" />
                 ) : (
@@ -59,7 +62,7 @@ const SettingsSheet = () => {
                 )}
                 <input
                   type="text"
-                  className="bg-[#202C33] flex-1 rounded-md py-1.5 placeholder:text-xs pl-2 focus:ring-0 outline-none text-white text-sm"
+                  className="bg-[#F0F2F6] dark:bg-[#202C33] flex-1 rounded-md py-1.5 placeholder:text-xs pl-2 focus:ring-0 outline-none text-white text-sm"
                   placeholder="Search or start new chat"
                   ref={inputRef}
                   onFocus={() => setEditing(true)}
@@ -71,26 +74,28 @@ const SettingsSheet = () => {
 
             <div className="flex flex-row items-center mx-5">
               <Avatar className="w-20 h-20">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={user.profilePicture} />
               </Avatar>
               <div className="flex flex-col justify-center gap-y-1 ml-3">
-                <h1 className="text-white text-lg font-medium">Vishnu</h1>
-                <h1 className="text-neutral-400 text-xs">Lot More To Come</h1>
+                <h1 className="text-black dark:text-white text-lg font-medium">
+                  {user.username}
+                </h1>
+                <h1 className="text-neutral-500 dark:text-neutral-400 text-xs">Lorem</h1>
               </div>
             </div>
 
             <div className="">
-              <div className="hover:bg-[#202C33] h-14 border-b border-neutral-700 flex flex-row items-center px-5 space-x-5">
-                <Bell className="text-[#708089] w-7 h-7" />
-                <p className="text-neutral-200">Notifications</p>
+              <div className="hover:bg-[#F5F6F6] dark:hover:bg-[#202C33] h-14 border-b border-neutral-700 flex flex-row items-center px-5 space-x-5">
+                <Bell className="text-[#8696A1] dark:text-[#708089] w-7 h-7" />
+                <p className="text-neutral-700 dark:text-neutral-200">Notifications</p>
               </div>
 
               {/* Theme */}
               <Dialog>
                 <DialogTrigger asChild>
-                  <div className="hover:bg-[#202C33] h-14 border-b border-neutral-700 flex flex-row items-center px-5 space-x-5">
-                    <Sun className="text-[#708089] w-7 h-7" />
-                    <p className="text-neutral-200">Theme</p>
+                  <div className="hover:bg-[#F5F6F6] dark:hover:bg-[#202C33] h-14 border-b border-neutral-700 flex flex-row items-center px-5 space-x-5">
+                    <Sun className="text-[#8696A1] dark:text-[#708089] w-7 h-7" />
+                    <p className="text-neutral-700 dark:text-neutral-200">Theme</p>
                   </div>
                 </DialogTrigger>
                 <DialogContent>

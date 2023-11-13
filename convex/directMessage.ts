@@ -51,3 +51,31 @@ export const getMessages = query({
     return messages;
   },
 });
+
+// Get last message from all users
+export const getUsersLastMsg = query({
+  handler: async (ctx, args) => {
+    const users = await ctx.db.query('users').collect();
+
+    const lastMessagesObject: { [key: string]: any } = {};
+
+    for (const user of users) {
+      const lastMessage = await ctx.db
+        .query('messages')
+        .filter((q) =>
+          q.or(
+            q.eq(q.field('receiver'), user._id),
+            q.eq(q.field('sender'), user._id)
+          )
+        )
+        .order('desc')
+        .first();
+
+      if (lastMessage) {
+        lastMessagesObject[user._id] = lastMessage;
+      }
+    }
+
+    return lastMessagesObject;
+  },
+});
